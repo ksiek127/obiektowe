@@ -1,9 +1,14 @@
+import java.util.LinkedList;
+
 public class World {
     public static void main(String[] args) {
-        Vector2d position1 = new Vector2d(1,2);
-        System.out.println(position1);
-        Vector2d position2 = new Vector2d(-2,1);
-        System.out.println(position2);
-        System.out.println(position1.add(position2));
+        Animal klaus = new Animal();
+        System.out.println("Position: " + klaus.getPosition());
+        String[] moves = {"f", "l", "backward"};
+        LinkedList<MoveDirection> parsedMoves = OptionsParser.parse(moves);
+        for(MoveDirection singleMove: parsedMoves){
+            klaus.move(singleMove);
+        }
+        System.out.println("Position: " + klaus.getPosition());
     }
 }
