@@ -15,15 +15,15 @@ public class Vector2d {
                 x + "," + y +  ')';
     }
 
-    boolean precedes(Vector2d other){
+    public boolean precedes(Vector2d other){
         return this.x <= other.x && this.y <= other.y;
     }
 
-    boolean follows(Vector2d other){
+    public boolean follows(Vector2d other){
         return this.x >= other.x && this.y >= other.y;
     }
 
-    Vector2d upperRight(Vector2d other){
+    public Vector2d upperRight(Vector2d other){
         int upperX = this.x;
         if(other.x > upperX){
             upperX = other.x;
@@ -35,7 +35,7 @@ public class Vector2d {
         return new Vector2d(upperX, upperY);
     }
 
-    Vector2d lowerLeft(Vector2d other){
+    public Vector2d lowerLeft(Vector2d other){
         int lowerX = this.x;
         if(other.x < lowerX){
             lowerX = other.x;
@@ -47,11 +47,11 @@ public class Vector2d {
         return new Vector2d(lowerX, lowerY);
     }
 
-    Vector2d add(Vector2d other){
+    public Vector2d add(Vector2d other){
         return new Vector2d(this.x + other.x, this.y + other.y);
     }
 
-    Vector2d subtract(Vector2d other){
+    public Vector2d subtract(Vector2d other){
         return new Vector2d(this.x - other.x, this.y - other.y);
     }
 
@@ -69,7 +69,7 @@ public class Vector2d {
         return Objects.hash(x, y);
     }
 
-    Vector2d opposite(){
+    public Vector2d opposite(){
         return new Vector2d((-1) * this.x, (-1) * this.y);
     }
 }
