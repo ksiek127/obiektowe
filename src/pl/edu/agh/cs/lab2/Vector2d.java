@@ -9,6 +9,14 @@ public class Vector2d {
         this.y = y;
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
     @Override
     public String toString() { // (x,y)
         return "(" +

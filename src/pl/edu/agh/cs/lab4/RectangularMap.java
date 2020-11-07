@@ -2,24 +2,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class RectangularMap implements IWorldMap{
-    private final int width;
-    private final int height;
-    private final List<Animal> animals = new ArrayList<>();
+public class RectangularMap extends AbstractWorldMap implements IWorldMap{
+//    private final List<Animal> animals = new ArrayList<>();
+    private final Vector2d lowerLeft = new Vector2d(0,0); //przyjalem konwencje, ze (0,0) to lewy dolny rog mapy
+    private final Vector2d upperRight;
 
     public RectangularMap(int width, int height) {
-        this.width = width;
-        this.height = height;
+        upperRight = new Vector2d(width, height);
     }
 
-    @Override
-    public List<Animal> getAnimals() {
-        return animals;
+    public Vector2d getLowerLeft() {
+        return lowerLeft;
+    }
+
+    public Vector2d getUpperRight() {
+        return upperRight;
     }
 
     @Override
     public boolean canMoveTo(Vector2d position) {
-        return position.follows(new Vector2d(0,0)) && position.precedes(new Vector2d(width, height)); //lewy dolny rog mapy znajduje sie na pozycji (0,0)
+        return position.follows(lowerLeft) && position.precedes(upperRight); //lewy dolny rog mapy znajduje sie na pozycji (0,0)
     }
 
     @Override
@@ -29,14 +31,6 @@ public class RectangularMap implements IWorldMap{
             return true;
         }
         return false;
-    }
-
-    @Override
-    public void run(List<MoveDirection> directions) {
-        int nrOfAnimals = animals.size();
-        for(int i=0; i<directions.size(); i++){
-            animals.get(i % nrOfAnimals).move(directions.get(i)); //wykonuje ruchy po kolei
-        }
     }
 
     @Override
@@ -62,6 +56,6 @@ public class RectangularMap implements IWorldMap{
     @Override
     public String toString() {
         MapVisualiser visualiser = new MapVisualiser(this);
-        return visualiser.draw(new Vector2d(0,0), new Vector2d(width, height)); //przyjalem konwencje, ze (0,0) to lewy dolny rog mapy
+        return visualiser.draw(lowerLeft, upperRight);
     }
 }

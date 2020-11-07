@@ -4,7 +4,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RectangularMapTest {
+class RectangularMapIntegrationTest {
     @Test
     public void runIntegrationTest(){
         List<MoveDirection> directions = new OptionsParser().parse(new String[]{"f", "b", "r", "l", "f", "f", "r", "r", "f", "f", "f", "f", "f", "f", "f", "f"});

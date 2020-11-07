@@ -1,6 +1,6 @@
-public class Animal {
+public class Animal extends AbstractWorldMapElement implements IMapElement{
     private MapDirection orientation;
-    private Vector2d position;
+//    private Vector2d position;
     private final Vector2d bottomLeft = new Vector2d(0,0);
     private final Vector2d upperRight = new Vector2d(4,4);
     private IWorldMap map;
@@ -11,14 +11,12 @@ public class Animal {
     }
 
     public Animal(IWorldMap map) {
-        this.orientation = MapDirection.NORTH;
-        this.position = new Vector2d(2,2);
+        this();
         this.map = map;
     }
 
     public Animal(IWorldMap map, Vector2d initialPosition) {
-        this.map = map;
-        this.orientation = MapDirection.NORTH;
+        this(map);
         this.position = initialPosition;
     }
 
@@ -38,25 +36,17 @@ public class Animal {
         return orientation;
     }
 
-    public Vector2d getPosition() {
-        return position;
-    }
-
     @Override
     public String toString() {
-        char orientationArrow = switch (this.orientation){
-            case NORTH -> '▲';
-            case EAST -> '◄';
-            case SOUTH -> '▼';
-            case WEST -> '►';
+        String orientationArrow = switch (this.orientation){
+            case NORTH -> "▲";
+            case EAST -> "◄";
+            case SOUTH -> "▼";
+            case WEST -> "►";
         };
-        return "Position: " + this.position + ", Orientation: " + this.orientation;
+//        return "Position: " + this.position + ", Orientation: " + this.orientation;
+        return orientationArrow;
     }
-
-//    public boolean isMoveLegal(Vector2d pos){
-//        //sprawdzam, czy nie wyjdzie poza plansze
-//        return pos.follows(bottomLeft) && pos.precedes(upperRight);
-//    }
 
     public void move(MoveDirection direction){
         switch (direction){
