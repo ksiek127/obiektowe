@@ -27,29 +27,21 @@ public class RectangularMap extends AbstractWorldMap implements IWorldMap{
     @Override
     public boolean place(Animal animal) { //zwraca informacje czy udalo sie postawic zwierze na mapie
         if(canMoveTo(animal.getPosition()) && !isOccupied(animal.getPosition())){ //jesli nie wyjde poza mape i nie ma tam innego zwierzaka
-            animals.add(animal); //dodaje do zwierzakow na mapie
+            animals.put(animal.getPosition(), animal); //dodaje do zwierzakow na mapie
             return true;
         }
-        return false;
+        throw new IllegalArgumentException("the animal cannot be placed at " + animal.getPosition());
     }
 
     @Override
     public boolean isOccupied(Vector2d position) {
-        for(Animal animalOnTheMap: animals){
-            if(animalOnTheMap.getPosition().equals(position))
-                return true;
-        }
-        return false;
+        return animals.containsKey(position);
     }
 
     @Override
     public Optional<Object> objectAt(Vector2d position) {
-        if(isOccupied(position)){
-            for(Animal animalOnTheMap: animals){ //sprawdzam dla kazdego zwierzaka, czy znajduje sie na danej pozycji
-                if(animalOnTheMap.getPosition().equals(position))
-                    return Optional.of(animalOnTheMap);
-            }
-        }
+        if(isOccupied(position))
+            return Optional.of(animals.get(position));
         return Optional.empty();
     }
 

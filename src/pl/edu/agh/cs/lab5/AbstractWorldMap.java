@@ -1,20 +1,24 @@
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 
 public abstract class AbstractWorldMap implements IWorldMap{
-    protected List<Animal> animals = new ArrayList<>();
+    protected final LinkedHashMap<Vector2d, Animal> animals = new LinkedHashMap<>();
 
     @Override
-    public List<Animal> getAnimals() {
+    public LinkedHashMap<Vector2d, Animal> getAnimals() {
         return animals;
     }
 
     @Override
     public void run(List<MoveDirection> directions) {
-        int nrOfAnimals = animals.size();
+        List<Animal> animalsList = new ArrayList<>(animals.values());
+        int nrOfAnimals = animalsList.size();
         for(int i=0; i<directions.size(); i++){
-            animals.get(i % nrOfAnimals).move(directions.get(i)); //wykonuje ruchy po kolei
+            animals.remove(animalsList.get(i % nrOfAnimals).getPosition()); //usuwam z listy zwierzakow
+            animalsList.get(i % nrOfAnimals).move(directions.get(i)); //wykonuje ruch
+            animals.put(animalsList.get(i % nrOfAnimals).getPosition(), animalsList.get(i % nrOfAnimals)); //wstawiam spowrotem z aktualna pozycja
         }
     }
 

@@ -1,10 +1,9 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Optional;
 
 public class GrassField extends AbstractWorldMap implements IWorldMap{
-//    private final List<Animal> animals = new ArrayList<>();
-    private final List<Grass> grassClumps = new ArrayList<>();
+    private final LinkedHashMap<Vector2d, Grass> grassClumps = new LinkedHashMap<>();
 
     public GrassField(int grassClumpNr) {
         for(int i=0; i<grassClumpNr; i++){
@@ -21,32 +20,24 @@ public class GrassField extends AbstractWorldMap implements IWorldMap{
     @Override
     public boolean place(Animal animal) {
         if(canMoveTo(animal.getPosition()) && !isOccupiedByAnAnimal(animal.getPosition())){ //jesli nie wyjde poza mape i nie ma tam innego zwierzaka
-            animals.add(animal); //dodaje do zwierzakow na mapie
+            animals.put(animal.getPosition(), animal); //dodaje do zwierzakow na mapie
             return true;
         }
-        return false;
+        throw new IllegalArgumentException("the animal cannot be placed at " + animal.getPosition());
     }
 
     public void place(Grass grass) {
-        grassClumps.add(grass);
+        grassClumps.put(grass.getPosition(), grass);
     }
 
     public boolean isOccupiedByAnAnimal(Vector2d position){
-        for(Animal animalOnTheMap: animals){
-            if(animalOnTheMap.getPosition().equals(position))
-                return true;
-        }
-        return false;
+        return animals.containsKey(position);
     }
 
     public boolean isOccupiedByGrass(Vector2d position) {
         if(isOccupiedByAnAnimal(position))  //jesli tam jest zwierze, to ma priorytet nad trawa czyli tej trawy tak naprawde nie ma chwilowo
             return false;
-        for(Grass grass: grassClumps){
-            if(grass.getPosition().equals(position))
-                return true;
-        }
-        return false;
+        return grassClumps.containsKey(position);
     }
 
     @Override
@@ -56,54 +47,49 @@ public class GrassField extends AbstractWorldMap implements IWorldMap{
 
     @Override
     public Optional<Object> objectAt(Vector2d position) {
-        if(isOccupiedByAnAnimal(position)){
-            for(Animal animalOnTheMap: animals){ //sprawdzam dla kazdego zwierzaka, czy znajduje sie na danej pozycji
-                if(animalOnTheMap.getPosition().equals(position))
-                    return Optional.of(animalOnTheMap);
-            }
-        }
-        if(isOccupiedByGrass(position)){ //jesli nie ma tam zwierzaka, to sprawdzam, czy jest kepka trawy
-            for(Grass grass: grassClumps){
-                if(grass.getPosition().equals(position))
-                    return Optional.of(grass);
-            }
-        }
-
+        if(isOccupiedByAnAnimal(position))
+            return Optional.of(animals.get(position));
+        if(isOccupiedByGrass(position)) //jesli nie ma tam zwierzaka, to sprawdzam, czy jest kepka trawy
+            return Optional.of(grassClumps.get(position));
         return Optional.empty();
     }
 
     private Vector2d bottomLeftCorner(){ //obliczam wspolrzedne lewego dolnego rogu mapy
-        int left = grassClumps.get(0).getPosition().getX();
-        int bottom = grassClumps.get(0).getPosition().getY();
-        for(Grass grass: grassClumps){
-            if(grass.getPosition().getX() < left)
-                left = grass.getPosition().getX();
-            if(grass.getPosition().getY() < bottom)
-                bottom = grass.getPosition().getY();
+        int left = grassClumps.entrySet().iterator().next().getKey().getX();
+        int bottom = grassClumps.entrySet().iterator().next().getKey().getY();
+        for(Map.Entry<Vector2d, Grass> grass: grassClumps.entrySet()){
+            Vector2d position = grass.getKey();
+            if(position.getX() < left)
+                left = position.getX();
+            if(position.getY() < bottom)
+                bottom = position.getY();
         }
-        for(Animal animal: animals){
-            if(animal.getPosition().getX() < left)
-                left = animal.getPosition().getX();
-            if(animal.getPosition().getY() < bottom)
-                bottom = animal.getPosition().getY();
+        for(Map.Entry<Vector2d, Animal> animal: animals.entrySet()){
+            Vector2d position = animal.getKey();
+            if(position.getX() < left)
+                left = position.getX();
+            if(position.getY() < bottom)
+                bottom = position.getY();
         }
         return new Vector2d(left, bottom);
     }
 
     private Vector2d topRightCorner(){ //obliczam wspolrzedne prawego gornego rogu mapy
-        int right = grassClumps.get(0).getPosition().getX();
-        int top = grassClumps.get(0).getPosition().getY();
-        for(Grass grass: grassClumps){
-            if(grass.getPosition().getX() > right)
-                right = grass.getPosition().getX();
-            if(grass.getPosition().getY() > top)
-                top = grass.getPosition().getY();
+        int right = grassClumps.entrySet().iterator().next().getKey().getX();
+        int top = grassClumps.entrySet().iterator().next().getKey().getY();
+        for(Map.Entry<Vector2d, Grass> grass: grassClumps.entrySet()){
+            Vector2d position = grass.getKey();
+            if(position.getX() > right)
+                right = position.getX();
+            if(position.getY() > top)
+                top = position.getY();
         }
-        for(Animal animal: animals){
-            if(animal.getPosition().getX() > right)
-                right = animal.getPosition().getX();
-            if(animal.getPosition().getY() > top)
-                top = animal.getPosition().getY();
+        for(Map.Entry<Vector2d, Animal> animal: animals.entrySet()){
+            Vector2d position = animal.getKey();
+            if(position.getX() > right)
+                right = position.getX();
+            if(position.getY() > top)
+                top = position.getY();
         }
         return new Vector2d(right, top);
     }

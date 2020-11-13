@@ -14,15 +14,6 @@ class GrassFieldTest {
     }
 
     @Test
-    void placeShouldReturnFalseIfThePositionWhereAnimalWasAboutToBePlacedIsAlreadyOccupied() {
-        GrassField testField = new GrassField(10);
-        Animal experimentalRabbit = new Animal(testField, new Vector2d(4, 2));
-        Animal experimentalRabbitV2 = new Animal(testField, new Vector2d(4, 2));
-        testField.place(experimentalRabbit);
-        assertFalse(testField.place(experimentalRabbitV2));
-    }
-
-    @Test
     void isOccupiedShouldReturnTrueIfAPlaceIsOccupied() {
         GrassField testField = new GrassField(0);
         Animal experimentalRabbit = new Animal(testField, new Vector2d(4, 2));

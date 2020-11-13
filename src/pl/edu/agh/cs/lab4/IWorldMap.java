@@ -1,3 +1,4 @@
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,5 +57,5 @@ public interface IWorldMap {
      */
     Optional<Object> objectAt(Vector2d position);
 
-    List<Animal> getAnimals();
+    LinkedHashMap<Vector2d, Animal> getAnimals();
 }
