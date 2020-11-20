@@ -29,7 +29,7 @@ public enum MapDirection {
         };
     }
 
-    public Vector2d toUnitVector(){
+    public Vector2d toUnitVector(){ //zwraca wektor jednostkowy zgodny ze zwrotem
         return switch (this){
             case EAST -> new Vector2d(1, 0);
             case WEST -> new Vector2d(-1, 0);

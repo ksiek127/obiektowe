@@ -1,9 +1,11 @@
-public class Animal extends AbstractWorldMapElement implements IMapElement{
-    private MapDirection orientation;
-//    private Vector2d position;
-    private final Vector2d bottomLeft = new Vector2d(0,0);
-    private final Vector2d upperRight = new Vector2d(4,4);
-    private IWorldMap map;
+import java.util.ArrayList;
+
+public class Animal extends AbstractWorldMapElement implements IMapElement, IPositionChangedPublisher{
+    private MapDirection orientation; //orientaja (N/E/S/W)
+    private final Vector2d bottomLeft = new Vector2d(0,0); //lewy dolny rog prostokatnej mapy
+    private final Vector2d upperRight = new Vector2d(4,4); //prawy gorny rog
+    private IWorldMap map; //mapa, na ktorej znajduje sie dane zwierze
+    private final ArrayList<IPositionChangeObserver> observers = new ArrayList<>();
 
     public Animal() {
         this.orientation = MapDirection.NORTH;
@@ -38,17 +40,15 @@ public class Animal extends AbstractWorldMapElement implements IMapElement{
 
     @Override
     public String toString() {
-        String orientationArrow = switch (this.orientation){
+        return switch (this.orientation){
             case NORTH -> "▲";
             case EAST -> "◄";
             case SOUTH -> "▼";
             case WEST -> "►";
         };
-//        return "Position: " + this.position + ", Orientation: " + this.orientation;
-        return orientationArrow;
     }
 
-    public void move(MoveDirection direction){
+    public void move(MoveDirection direction){ //wykonanie pojedynczego ruchu
         switch (direction){
             case RIGHT -> this.orientation = MapDirection.next(this.orientation);
             case LEFT -> this.orientation = MapDirection.previous(this.orientation);
@@ -62,6 +62,22 @@ public class Animal extends AbstractWorldMapElement implements IMapElement{
                     this.position = this.position.subtract(this.orientation.toUnitVector());
                 }
             }
+        }
+    }
+
+    @Override
+    public void addObserver(IPositionChangeObserver observer){
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(IPositionChangeObserver observer){
+        observers.remove(observer);
+    }
+
+    public void positionChanged(IMapElement movedElement, Vector2d oldPosition, Vector2d newPosition){
+        for(IPositionChangeObserver observer: observers){ //notyfikacja o zmianie pozycji dla kazdego obserwatora
+            observer.positionChanged(movedElement, oldPosition, newPosition);
         }
     }
 }

@@ -23,15 +23,15 @@ public class Vector2d {
                 x + "," + y +  ')';
     }
 
-    public boolean precedes(Vector2d other){
+    public boolean precedes(Vector2d other){ //czy ten wektor jest 'poprzednikiem' wektora podanego jako argument, czyli czy odpowiednie wspolrzedne sa mniejsze lub rowne wspolrzednym drugiego wektora
         return this.x <= other.x && this.y <= other.y;
     }
 
     public boolean follows(Vector2d other){
         return this.x >= other.x && this.y >= other.y;
-    }
+    } //analogicznie nastepnik
 
-    public Vector2d upperRight(Vector2d other){
+    public Vector2d upperRight(Vector2d other){ //prawy gorny rog prostokata, ktorego przekatna to odcinek laczacy dane dwa punkty
         int upperX = this.x;
         if(other.x > upperX){
             upperX = other.x;
@@ -43,7 +43,7 @@ public class Vector2d {
         return new Vector2d(upperX, upperY);
     }
 
-    public Vector2d lowerLeft(Vector2d other){
+    public Vector2d lowerLeft(Vector2d other){ //analogicznie lewy dolny rog
         int lowerX = this.x;
         if(other.x < lowerX){
             lowerX = other.x;
@@ -57,11 +57,11 @@ public class Vector2d {
 
     public Vector2d add(Vector2d other){
         return new Vector2d(this.x + other.x, this.y + other.y);
-    }
+    } //suma wektorow
 
     public Vector2d subtract(Vector2d other){
         return new Vector2d(this.x - other.x, this.y - other.y);
-    }
+    } //roznica danego wektora i wektora podanego jako argument
 
     @Override
     public boolean equals(Object o) {
@@ -77,7 +77,7 @@ public class Vector2d {
         return Objects.hash(x, y);
     }
 
-    public Vector2d opposite(){
+    public Vector2d opposite(){ //wektor przeciwny
         return new Vector2d((-1) * this.x, (-1) * this.y);
     }
 }
